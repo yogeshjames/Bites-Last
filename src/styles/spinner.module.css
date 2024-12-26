@@ -1,0 +1,24 @@
+.pl {
+  width: 6em;
+  height: 6em;
+}
+
+.plRing {
+  animation: ringA 2s linear infinite;
+}
+
+.plRingInner {
+  animation: ringB 1s linear infinite;
+}
+
+@keyframes ringA {
+  from { stroke-dasharray: 0 660; stroke-width: 20; }
+  50% { stroke-dasharray: 330 330; stroke-width: 30; }
+  to { stroke-dasharray: 660 0; stroke-width: 20; }
+}
+
+@keyframes ringB {
+  from { stroke-dasharray: 0 220; }
+  50% { stroke-dasharray: 110 110; }
+  to { stroke-dasharray: 220 0; }
+} 
