@@ -1,6 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const Hotel = require('../models/Hotel'); 
+const User = require ('../models/User');
+const { authenticateToken } = require('../controllers/Authmiddleware');
 
 // Route to get all hotels
 router.get('/getall', async (req, res) => {
@@ -48,7 +50,7 @@ router.get('/details/:hotelId', async (req, res) => {
 });  
 
 
-router.get('/reviews/:hotelId', async (req, res) => {
+router.get('/reviews/:hotelId',async (req, res) => {
   const { hotelId } = req.params;
   try {
     const hotel = await Hotel.findOne({ hotelId });
@@ -76,13 +78,12 @@ router.get('/reviews/:hotelId', async (req, res) => {
 });
 
 
-router.post('/reviews/:hotelId', async (req, res) => {
+router.post('/reviews/:hotelId',authenticateToken,  async (req, res) => {
   const { hotelId } = req.params;
   const { userId, comment, rating } = req.body;
-
   try {
     // Check if the user exists
-    const user = await User.findOne({ clientId: userId });
+    const user = await User.findOne({ userId: userId });
     if (!user) {
       return res.status(404).json({ message: 'User not found.' });
     }
@@ -95,12 +96,11 @@ router.post('/reviews/:hotelId', async (req, res) => {
 
     // Add the review to the hotel's reviews array
     const newReview = {
-      user: user.username, // Store the username or userId
+      user: user.name, // Store the username or userId
       comment,
       rating,
     };
     hotel.reviews.push(newReview);
-
     // Optionally update the average rating
     const totalRating = hotel.reviews.reduce((sum, review) => sum + review.rating, 0);
     hotel.currentRating = totalRating / hotel.reviews.length;
@@ -113,6 +113,7 @@ router.post('/reviews/:hotelId', async (req, res) => {
       newReview, // Return the new review to the frontend
     });
   } catch (error) {
+    console.log(error);
     res.status(500).json({ message: 'Failed to submit review.' });
   }
 });

@@ -60,7 +60,7 @@ db.once('open', async () => {
           comment: 'Had a pleasant stay, clean rooms.',
           rating: 4,
         }
-      ], // Added reviews here for testing
+      ], 
     });
 
     console.log('Initialized hotels collection with a placeholder document and test reviews');

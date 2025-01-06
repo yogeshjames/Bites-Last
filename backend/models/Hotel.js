@@ -1,6 +1,5 @@
 // models/Hotel.js
 const mongoose = require('mongoose');
-
 const hotelSchema = new mongoose.Schema({
   hotelId: {
     type: String,
@@ -25,11 +24,6 @@ const hotelSchema = new mongoose.Schema({
       rating: { type: Number, required: true, min: 0, max: 5 },
     },
   ],
-  numberOfUsersRated: {
-    type: Number,
-    default: 0,
-    min: 0,
-  },
   dishes: {
     type: [String], 
     default: [],

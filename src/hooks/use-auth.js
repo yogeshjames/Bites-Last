@@ -28,7 +28,7 @@ export function useAuth() {
   const handleRegister = useCallback(async (userData) => {
     try {
       await register(userData)
-      router.push('/login')
+      router.push('/')
     } catch (error) {
       throw error
     }

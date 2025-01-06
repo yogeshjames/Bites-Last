@@ -1,46 +1,47 @@
-'use client'
+'use client';
 
-import { 
-  Dialog, 
-  DialogTitle, 
-  DialogContent, 
+import {
+  Dialog,
+  DialogTitle,
+  DialogContent,
   DialogActions,
   Button,
   TextField,
   Stack,
   IconButton,
-  Typography
-} from '@mui/material'
-import { Close as CloseIcon } from '@mui/icons-material'
-import { useState } from 'react'
-import { useAuth } from '@/hooks/use-auth'
+  Typography,
+  Checkbox,
+  Link,
+  Box
+} from '@mui/material';
+import { Close as CloseIcon } from '@mui/icons-material';
+import { useState } from 'react';
+import { useAuth } from '@/hooks/use-auth';
+import { useRouter } from 'next/navigation'; 
+
 
 export function LoginDialog({ isOpen, onClose }) {
   const [credentials, setCredentials] = useState({
-    username: '',
+    mobile: '',
     password: ''
-  })
-  const { handleLogin } = useAuth()
-
+  });
+  const { handleLogin } = useAuth();
+  const router = useRouter();
   const handleSubmit = async (e) => {
-    e.preventDefault()
+    e.preventDefault();
     try {
-      await handleLogin(credentials)
-      onClose()
+      await handleLogin(credentials);
+      onClose();
+      window.location.reload();
     } catch (error) {
-      console.error('Login failed:', error)
+      console.error('Login failed:', error);
     }
-  }
+  };
 
+  
   return (
-    <Dialog 
-      open={isOpen} 
-      onClose={onClose}
-      maxWidth="sm"
-      fullWidth
-    >
-      <DialogTitle>
-        Sign In
+    <Dialog open={isOpen} onClose={onClose} maxWidth="sm" fullWidth>
+      <Box position="relative" p={4}>
         <IconButton
           aria-label="close"
           onClick={onClose}
@@ -53,46 +54,96 @@ export function LoginDialog({ isOpen, onClose }) {
         >
           <CloseIcon />
         </IconButton>
-      </DialogTitle>
-
+        <Typography
+          variant="h4"
+          fontWeight="bold"
+          color="text.primary"
+          gutterBottom
+          sx={{
+            fontFamily: 'Poppins, sans-serif',
+            fontSize: '2rem',
+            textAlign: 'center',
+          }}
+        >
+          Welcome Back!
+        </Typography>
+        <Typography
+          variant="body2"
+          color="text.secondary"
+          gutterBottom
+          sx={{
+            fontFamily: 'Poppins, sans-serif',
+            fontSize: '1rem',
+            textAlign: 'center',
+          }}
+        >
+          Log in now to explore all the features and benefits of our platform and see what’s new.
+        </Typography>
+      </Box>
       <form onSubmit={handleSubmit}>
         <DialogContent>
           <Stack spacing={3}>
             <TextField
-              autoFocus
-              label="Phone"
-              type="number"
+              placeholder="Enter your Mobile No."
+              value={credentials.mobile}
+              onChange={(e) => setCredentials((prev) => ({
+                ...prev,
+                mobile: e.target.value,
+              }))}
+              type="tel"
               fullWidth
               required
-              value={credentials.email}
-              onChange={(e) => setCredentials(prev => ({
-                ...prev,
-                email: e.target.value
-              }))}
+              variant="outlined"
+              inputProps={{
+                maxLength: 10,
+                minLength: 10,
+              }}
+              label="Mobile No."
+              sx={{
+                borderRadius: '8px',
+                '& .MuiOutlinedInput-root': {
+                  borderRadius: '8px',
+                },
+                fontFamily: 'Poppins, sans-serif',
+              }}
             />
+
             <TextField
-              label="Password"
+              placeholder="Enter your Password"
+              value={credentials.password}
+              onChange={(e) => setCredentials((prev) => ({
+                ...prev,
+                password: e.target.value,
+              }))}
               type="password"
               fullWidth
               required
-              value={credentials.password}
-              onChange={(e) => setCredentials(prev => ({
-                ...prev,
-                password: e.target.value
-              }))}
+              variant="outlined"
+              label="Password"
+              sx={{
+                borderRadius: '8px',
+                '& .MuiOutlinedInput-root': {
+                  borderRadius: '8px',
+                },
+                fontFamily: 'Poppins, sans-serif',
+              }}
             />
+            <Stack direction="row" justifyContent="space-between">
+              <Link href="#" color="primary.main" sx={{ fontFamily: 'Poppins, sans-serif', fontSize: '0.9rem' }}>
+                Forgot Password?
+              </Link>
+            </Stack>
           </Stack>
         </DialogContent>
-
         <DialogActions sx={{ px: 3, pb: 3 }}>
-          <Button onClick={onClose} variant="outlined">
+          <Button onClick={onClose} variant="outlined" sx={{ fontFamily: 'Poppins, sans-serif', borderRadius: '8px' }}>
             Cancel
           </Button>
-          <Button type="submit" variant="contained">
-            Sign In
+          <Button type="submit" variant="contained" color="primary" sx={{ fontFamily: 'Poppins, sans-serif', borderRadius: '8px' }}>
+            Login
           </Button>
         </DialogActions>
       </form>
     </Dialog>
-  )
-} 
+  );
+}

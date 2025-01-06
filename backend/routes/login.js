@@ -1,7 +1,7 @@
 const express = require('express');
 const jwt = require('jsonwebtoken');
 const User = require('../models/User'); 
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 require('dotenv').config();
 
 const router = express.Router();
@@ -10,7 +10,8 @@ const router = express.Router();
 router.post('/', async (req, res) => {
   const { mobile, password } = req.body;
   try {
-    const user = await User.findOne({ mobile });
+    const user = await User.findOne({  mobile: mobile } );
+    console.log(mobile);
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
     }

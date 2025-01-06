@@ -27,7 +27,7 @@ router.get('/verifyToken', authenticateToken, (req, res) => {
 });
 
 // Logout Route - Clears the HTTP-only cookie
-router.post('/logout', (req, res) => {
+router.get('/logout', (req, res) => {
   res.clearCookie('token');
   res.status(200).json({ success: true, message: 'Logged out successfully' });
 });

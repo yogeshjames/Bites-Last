@@ -7,6 +7,7 @@ const CartContext = createContext()
 
 export function CartProvider({ children }) {
   const [items, setItems] = useState([])
+  const [restId, setRestId] = useState(null) // Changed restaurantId to restId
   const [loading, setLoading] = useState(true)
   const [snackbar, setSnackbar] = useState({
     open: false,
@@ -14,11 +15,16 @@ export function CartProvider({ children }) {
     severity: 'success'
   })
 
+  // Load saved cart from localStorage
   useEffect(() => {
     const savedCart = localStorage.getItem('cart')
-    if (savedCart) {
+    const savedRestId = localStorage.getItem('restaurantId') 
+    
+    if (savedCart && savedRestId) {
       setItems(JSON.parse(savedCart))
+      setRestId(savedRestId) 
     }
+
     setLoading(false)
   }, [])
 
@@ -34,34 +40,49 @@ export function CartProvider({ children }) {
     })
   }
 
-  const saveCart = (newItems) => {
+  const saveCart = (newItems, newRestId) => {
     localStorage.setItem('cart', JSON.stringify(newItems))
+    localStorage.setItem('restaurantId', newRestId) 
     setItems(newItems)
+    setRestId(newRestId) 
   }
 
-  const addItem = (dish, quantity = 1) => {
+  const addItem = (dish, restaurantId, quantity = 1) => {
+    console.log(restaurantId);
+
+    if (restId && restId !== restaurantId) {
+      clearCart() // Clear the cart if restaurantId differs from the stored restId
+    }
+
     const existingItem = items.find(item => item.id === dish.id)
-    
+
     if (existingItem) {
-      const newItems = items.map(item => 
-        item.id === dish.id 
+      const newItems = items.map(item =>
+        item.id === dish.id
           ? { ...item, quantity: item.quantity + quantity }
           : item
       )
-      saveCart(newItems)
+      saveCart(newItems, restaurantId) // Pass the incoming restaurantId
     } else {
-      saveCart([...items, { ...dish, quantity }])
+      saveCart([...items, { ...dish, quantity }], restaurantId) // Save new item with restaurantId
     }
 
     showNotification(`${dish.name} added to cart`)
   }
 
   const removeItem = (dishId) => {
-    const newItems = items.filter(item => item.id !== dishId)
-    saveCart(newItems)
-    showNotification('Item removed from cart')
-  }
+    const newItems = items.filter(item => item.id !== dishId);
+  console.log(newItems);
 
+  if (newItems.length === 0) {
+    clearCart();
+    console.log('Cart is empty, clearing cart...');
+  } else {
+    saveCart(newItems, restId); 
+  }
+  showNotification('Item removed from cart');
+};
+  // Update quantity of item
   const updateQuantity = (dishId, quantity) => {
     if (quantity < 1) {
       removeItem(dishId)
@@ -71,12 +92,15 @@ export function CartProvider({ children }) {
     const newItems = items.map(item =>
       item.id === dishId ? { ...item, quantity } : item
     )
-    saveCart(newItems)
+    saveCart(newItems, restId) // Update with restId
   }
 
+  // Clear the cart function
   const clearCart = () => {
     localStorage.removeItem('cart')
+    localStorage.removeItem('restaurantId') // Clear restaurant ID from localStorage
     setItems([])
+    setRestId(null) // Clear restId
     showNotification('Cart cleared')
   }
 
@@ -85,7 +109,7 @@ export function CartProvider({ children }) {
   }
 
   return (
-    <CartContext.Provider 
+    <CartContext.Provider
       value={{
         items,
         loading,
@@ -93,18 +117,19 @@ export function CartProvider({ children }) {
         removeItem,
         updateQuantity,
         clearCart,
-        getTotal
+        getTotal,
+        restId 
       }}
     >
       {children}
-      <Snackbar 
-        open={snackbar.open} 
-        autoHideDuration={3000} 
+      <Snackbar
+        open={snackbar.open}
+        autoHideDuration={3000}
         onClose={handleCloseSnackbar}
         anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
       >
-        <Alert 
-          onClose={handleCloseSnackbar} 
+        <Alert
+          onClose={handleCloseSnackbar}
           severity={snackbar.severity}
           variant="filled"
           sx={{ width: '100%' }}
@@ -122,4 +147,4 @@ export const useCart = () => {
     throw new Error('useCart must be used within a CartProvider')
   }
   return context
-} 
+}

@@ -1,6 +1,6 @@
 'use client'
 
-import { createContext, useContext, useState } from 'react'
+import { createContext, useContext, useState ,useEffect} from 'react'
 import { Snackbar, Alert } from '@mui/material'
 
 export const UserContext = createContext()
@@ -12,7 +12,6 @@ export function UserProvider({ children }) {
     message: '',
     severity: 'success'
   })
-
   const handleCloseSnackbar = () => {
     setSnackbar(prev => ({ ...prev, open: false }))
   }
@@ -27,27 +26,90 @@ export function UserProvider({ children }) {
 
   const login = async (credentials) => {
     try {
-      // Implement login logic here
-      showNotification('Successfully logged in')
-    } catch (error) {
-      showNotification(error.message, 'error')
-      throw error
-    }
-  }
+      console.log(credentials);
+        const response = await fetch(`http://localhost:5000/api/user/login`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(credentials),
+            credentials: 'include',
+        });
 
-  const logout = () => {
+        const result = await response.json();
+         
+        if (!response.ok) throw new Error(result.message || 'Login failed');
+console.log(result);
+localStorage.setItem('userId', `${result.clientId}`);
+        setUser(result.user);
+        showNotification('Successfully logged in');
+    } catch (error) {
+        showNotification(error.message, 'error');
+        throw error;
+    }
+};
+
+
+const verifyToken = async () => {
     try {
-      setUser(null)
-      showNotification('Successfully logged out')
+        const response = await fetch(`http://localhost:5000/api/auth/verifyToken`, {
+            credentials: 'include',
+        });
+
+        if (response.ok) {
+            const result = await response.json();
+            setUser(result.user);
+        } else {
+            setUser(null);
+        }
+    } catch {
+        setUser(null);
+    }
+};
+
+useEffect(() => {
+    verifyToken();
+}, []);
+
+
+
+
+  const logout = async  () => {
+    try {
+      const re = await fetch(`http://localhost:5000/api/auth/logout`);
+
+      if(re.ok){
+        setUser(null)
+
+        showNotification('Successfully logged out')
+      }
+      
     } catch (error) {
       showNotification('Error logging out', 'error')
     }
   }
 
+
+
   const register = async (userData) => {
+    const backendUrl = process.env.BACKEND_URL
     try {
-      // Implement register logic here
-      showNotification('Successfully registered')
+      // Send the POST request to your external backend API with user data
+      const response = await fetch(`http://localhost:5000/api/user/register`, {////////WHY .ENV DOESNT WORK 
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(userData),  // Sending the user data as JSON
+      });
+  
+      // Get the response from the backend
+      const result = await response.json();
+  
+      if (!response.ok) {
+        throw new Error(result.message || 'Registration failed');
+      }
+  
+      // Show success notification
+      showNotification('Successfully registered');
     } catch (error) {
       showNotification(error.message, 'error')
       throw error
@@ -55,7 +117,7 @@ export function UserProvider({ children }) {
   }
 
   return (
-    <UserContext.Provider value={{ user, login, logout, register }}>
+    <UserContext.Provider value={{ user, login, logout, register,verifyToken }}>
       {children}
       <Snackbar 
         open={snackbar.open} 

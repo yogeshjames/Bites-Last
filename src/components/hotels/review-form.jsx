@@ -15,9 +15,10 @@ export function ReviewForm({ onSubmit, onCancel }) {
   const [rating, setRating] = useState(0);
   const [comment, setComment] = useState('');
 
+  const userId = localStorage.getItem('userId')
   const handleSubmit = (e) => {
     e.preventDefault();
-    onSubmit({ rating, comment });
+    onSubmit({ rating, comment,userId });
   };
 
   return (

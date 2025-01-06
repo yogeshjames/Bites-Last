@@ -41,25 +41,16 @@ export function HotelCard({
       onClick={handleClick}
     >
       <Box sx={{ position: 'relative', width: 150 }}>
-        <CardMedia
-          component={Image}
-          src={`${process.env.NEXT_PUBLIC_API_URL}/${thumbnailImage}`}
-          alt={hotelName}
-          width={150}
-          height={200}
-          sx={{ objectFit: 'cover' }}
-        />
-        <IconButton
-          sx={{
-            position: 'absolute',
-            top: 8,
-            right: 8,
-            zIndex: 1,
-          }}
-          onClick={handleLikeClick}
-        >
-          <HeartButton isLiked={liked} />
-        </IconButton>
+         <Image
+                  src={`http://localhost:5000/${thumbnailImage}`}
+                  alt={hotelName}
+                  fill
+                  style={{ objectFit: 'cover', borderRadius: '8px' }}
+                  priority
+                />
+        
+          <HeartButton isLiked={liked}  onClick={handleLikeClick} />
+
       </Box>
 
       <CardContent sx={{ flex: 1 }}>
@@ -69,10 +60,6 @@ export function HotelCard({
 
         <Typography variant="body2" color="text.secondary">
           Rating: {currentRating} ⭐ ({numberOfUsersRated} users)
-        </Typography>
-
-        <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
-          Popular Dishes: {dishes.join(", ")}
         </Typography>
       </CardContent>
     </Card>

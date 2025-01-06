@@ -8,12 +8,16 @@ import { Image } from '@/components/ui/image';
 import { ReviewsSection } from './reviews-section';
 import { FeaturedSection } from './featured-section';
 import { AboutSection } from './about-section';
-
+import { useRouter } from 'next/navigation'; 
 export function Home() {
   const [isSignInOpen, setIsSignInOpen] = useState(false);
   const theme = useTheme();
+  const router = useRouter();
   const matches = useMediaQuery(theme.breakpoints.up('md'));
   const backgroundImage = matches ? '/images/largebg.jpg' : '/images/smallbg.jpg';
+  const handleRegisterRedirect = () => {
+    router.push('/register'); // Navigate to /register page
+  };
   return (
     <Box sx={{ overflowX: 'hidden' }}>
       {/* Hero Section */}
@@ -40,14 +44,12 @@ export function Home() {
           sx={{
             position: 'absolute',
             top: '50%',
-            left: '50%',
-            transform: {xs: 'translate(-50%,-50%)', md: 'translate(-10%,-50%)'},
+            left: '45%',
+            transform: {xs: 'translate(-60%,-30%)', md: 'translate(-10%,-50%)'},
             textAlign: 'center',
-            width: '90%',
+            width: '80%',
             maxWidth: '600px',
             zIndex: 1,
-            backgroundColor: 'rgba(0,0,0,0.4)',
-            borderRadius: 2,
             p: 4
           }}
         >
@@ -60,7 +62,7 @@ export function Home() {
             Get your food delivered.
           </Typography>
           <Button
-            onClick={() => setIsSignInOpen(true)}
+            onClick={() => handleRegisterRedirect()}
             variant="contained"
             color="primary"
             size="large"
@@ -82,11 +84,11 @@ export function Home() {
       <Divider />
 
       {/* Hotels List Section */}
-      <Container maxWidth="lg" sx={{ py: 8 }}>
+      <Container maxWidth="lg" sx={{ py: 6 }}>
         <Typography
           variant="h4"
           component="h2"
-          sx={{ mb: 4, fontWeight: 'bold', textAlign: 'center' }}
+          sx={{  fontWeight: 'bold', textAlign: 'center' }}
         >
           Popular Restaurants
         </Typography>
@@ -96,7 +98,7 @@ export function Home() {
       <Divider />
 
        {/* Featured Section */}
-       <Container maxWidth="lg" sx={{ py: 8 }}>
+       <Container maxWidth="lg" sx={{ py: 5 }}>
         <FeaturedSection />
       </Container>
 
@@ -110,7 +112,7 @@ export function Home() {
       <Divider /> */}
 
       {/* About Section */}
-      <Container maxWidth="lg" sx={{ py: 8 }}>
+      <Container maxWidth="lg" sx={{ py: 6 }}>
         <AboutSection />
       </Container>
 

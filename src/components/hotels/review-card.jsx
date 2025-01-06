@@ -2,9 +2,16 @@
 
 import { Card, CardContent, Typography, Box, Avatar } from '@mui/material';
 import { StarRating } from '@/components/ui/star-rating';
-import { formatDistanceToNow } from 'date-fns';
 
 export function ReviewCard({ review }) {
+
+  function maskText(text, visibleChars = 3) {
+    if (!text || text.length <= visibleChars) return text;
+    const visiblePart = text.slice(0, visibleChars);
+    const maskedPart = '*'.repeat(text.length - visibleChars);
+    return `${visiblePart}${maskedPart}`;
+  }
+
   return (
     <Card variant="outlined">
       <CardContent>
@@ -14,14 +21,11 @@ export function ReviewCard({ review }) {
             alt={review.userName}
             sx={{ width: 32, height: 32, mr: 1 }}
           />
-          <Box sx={{ flex: 1 }}>
-            <Typography variant="subtitle2">
-              {review.userName}
-            </Typography>
-            <Typography variant="caption" color="text.secondary">
-              {formatDistanceToNow(new Date(review.createdAt), { addSuffix: true })}
-            </Typography>
-          </Box>
+         <Box sx={{ flex: 1 }}>
+  <Typography variant="subtitle2">
+    {maskText(review.user)}
+  </Typography>
+</Box>
           <StarRating
             value={review.rating}
             readOnly

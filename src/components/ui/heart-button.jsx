@@ -11,18 +11,19 @@ const StyledIconButton = styled(IconButton)(({ theme }) => ({
     transform: 'scale(1.1)',
   },
   '& .MuiSvgIcon-root': {
+    fontSize: '2.5rem', // Adjusted size for larger heart
     color: theme.palette.error.main,
-  }
+  },
 }))
 
 export function HeartButton({ isLiked, onClick }) {
   return (
     <StyledIconButton
       onClick={onClick}
-      size="medium"
+      size="medium" // Adjust button size if needed
       aria-label={isLiked ? 'Unlike' : 'Like'}
     >
       {isLiked ? <FavoriteIcon /> : <FavoriteBorderIcon />}
     </StyledIconButton>
   )
-} 
+}

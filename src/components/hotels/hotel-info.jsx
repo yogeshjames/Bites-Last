@@ -2,14 +2,14 @@
 
 import { Box, Typography, Stack, Chip } from '@mui/material'
 import Image from 'next/image'
-import { TruckLoader } from '@/components/ui/truck-loader'
+import  Loader  from '@/components/ui/Loader'
 
 export function HotelInfo({ hotel }) {
   return (
     <Box>
       <Box sx={{ position: 'relative', height: 400, width: '100%' }}>
         <Image
-          src={`${process.env.NEXT_PUBLIC_API_URL}/${hotel.thumbnailImage}`}
+          src={`http://localhost:5000/${hotel.thumbnailImage}`}
           alt={hotel.hotelName}
           fill
           style={{ objectFit: 'cover', borderRadius: '8px' }}
@@ -31,20 +31,18 @@ export function HotelInfo({ hotel }) {
           >
             {hotel.hotelName}
           </Typography>
-          <TruckLoader />
+          <Loader />
         </Box>
 
         <Typography
           variant="h6"
           color="text.secondary"
-          fontFamily="Nunito"
           align="center"
           sx={{ pt: '7px' }}
         >
           Rating: {hotel.currentRating}{' '}
           <Chip 
-            label={`${hotel.numberOfUsersRated} reviews`}
-            color="success"
+            label={`${hotel.reviews.length} reviews`}
             size="small"
           />
         </Typography>

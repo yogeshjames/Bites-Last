@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 import { IconButton } from '@mui/material';
 import { Brightness4 as MoonIcon, Brightness7 as SunIcon } from '@mui/icons-material';
@@ -15,4 +15,4 @@ export function ThemeToggle() {
       {theme === 'dark' ? <SunIcon /> : <MoonIcon />}
     </IconButton>
   );
-} 
+}

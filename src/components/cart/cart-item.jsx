@@ -7,7 +7,6 @@ import {
   Stack,
   TextField,
   Card,
-  CardMedia,
   CardContent,
 } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -18,30 +17,24 @@ export function CartItem({ item }) {
   const { updateQuantity, removeItem } = useCart();
 
   return (
-    <Card variant="outlined">
-      <Box sx={{ display: 'flex', p: 2 }}>
-        <CardMedia
-          component="img"
-          sx={{ width: 100, height: 100, borderRadius: 1, objectFit: 'cover' }}
-          image={`${process.env.NEXT_PUBLIC_API_URL}/${item.image}`}
-          alt={item.name}
-        />
-        <CardContent sx={{ flex: 1, pl: 2 }}>
-          <Typography variant="subtitle1" fontWeight="bold">
+    <Card variant="outlined" sx={{ maxWidth: 400, marginBottom: 1 }}>
+      <Box sx={{ display: 'flex', p: 1.5 }}>
+        <CardContent sx={{ flex: 1, pl: 1.5, pr: 1.5 }}>
+          <Typography variant="subtitle2" fontWeight="bold" noWrap>
             {item.name}
           </Typography>
-          <Typography color="text.secondary">
+          <Typography color="text.secondary" variant="body2">
             {formatPrice(item.price)}
           </Typography>
-          
-          <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ mt: 2 }}>
+
+          <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ mt: 1.5 }}>
             <TextField
               type="number"
               value={item.quantity}
               onChange={(e) => updateQuantity(item.id, parseInt(e.target.value))}
               inputProps={{ min: 1, max: 10 }}
               size="small"
-              sx={{ width: 80 }}
+              sx={{ width: 50 }}
             />
             <IconButton
               onClick={() => removeItem(item.id)}
@@ -49,11 +42,11 @@ export function CartItem({ item }) {
               color="error"
               aria-label="Remove item"
             >
-              <DeleteIcon />
+              <DeleteIcon fontSize="small" />
             </IconButton>
           </Stack>
         </CardContent>
       </Box>
     </Card>
   );
-} 
+}

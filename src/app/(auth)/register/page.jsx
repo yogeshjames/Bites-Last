@@ -1,150 +1,199 @@
-'use client'
+'use client';
 
+import React, { useState, useEffect } from 'react';
 import {
   Box,
-  Button,
-  Container,
-  FormControl,
-  FormLabel,
+  Grid,
   TextField,
-  Stack,
+  Button,
   Typography,
-  MenuItem,
-  InputAdornment,
-} from '@mui/material'
-import { useState } from 'react'
+  Container,
+  Paper,
+} from '@mui/material';
+import { styled } from '@mui/material/styles';
+import axios from 'axios';
+import { toast, ToastContainer } from 'react-toastify';
+import { useRouter } from 'next/navigation'; // Use Next.js router instead of react-router-dom
+import 'react-toastify/dist/ReactToastify.css';
 import { useAuth } from '@/hooks/use-auth'
-import Link from 'next/link'
+// Styled Paper Component
+const StyledPaper = styled(Paper)(({ theme }) => ({
+  padding: theme.spacing(4),
+  borderRadius: theme.spacing(2),
+  boxShadow: '0 8px 16px rgba(0,0,0,0.2)',
+  background: '#fdfcfb',
+}));
 
 export default function RegisterPage() {
   const [formData, setFormData] = useState({
     name: '',
-    mobile: '',
     password: '',
     rollno: '',
     hostel: '',
     room: '',
-  })
+    mobile: '',
+  });
+  const [verifiedNumber, setVerifiedNumber] = useState('');
+  const router = useRouter(); // Use Next.js's useRouter hook
   const { handleRegister } = useAuth()
-
-  const handleSubmit = async (e) => {
-    e.preventDefault()
-    try {
-      await handleRegister(formData)
-    } catch (error) {
-      // Error is handled by useAuth hook
-    }
-  }
-
   const handleChange = (e) => {
-    const { name, value } = e.target
-    setFormData(prev => ({ ...prev, [name]: value }))
-  }
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+  };
+
+  useEffect(() => {
+    // Load the external script for phone number verification
+    const script = document.createElement('script');
+    script.src = 'https://www.phone.email/sign_in_button_v1.js';
+    script.async = true;
+    document.querySelector('.pe_signin_button').appendChild(script);
+
+    // Define the listener function for phone verification
+    window.phoneEmailListener = function (userObj) {
+      const user_json_url = userObj.user_json_url;
+
+      // Fetch the verified phone number from the JSON URL
+      axios.get(user_json_url).then((response) => {
+        const { user_phone_number } = response.data;
+        setVerifiedNumber(user_phone_number);
+        toast.success('Phone verification successful!');
+      });
+    };
+
+    return () => {
+      window.phoneEmailListener = null; // Cleanup listener
+    };
+  }, []);
+
+  const handleSubmit = async () => {
+    event.preventDefault();
+    if (!verifiedNumber) {
+      toast.error('Please verify your phone number first!');
+      return;
+    }
+
+    if (formData.mobile !== verifiedNumber) {
+      toast.error('The phone number you entered does not match the verified number!');
+      return;
+    }
+
+      
+     try {
+             await handleRegister(formData);
+           } catch (error) {
+             // Error is handled by useAuth hook
+      }
+  };
 
   return (
-    <Container maxWidth="sm" sx={{ py: 8 }}>
-      <Stack spacing={8}>
-        <Box textAlign="center">
-          <Typography variant="h4" component="h1">Create an Account</Typography>
-          <Typography color="text.secondary" sx={{ mt: 2 }}>
-            Already have an account?{' '}
-            <Link href="/login" style={{ color: 'primary.main' }}>
-              Sign in
-            </Link>
-          </Typography>
-        </Box>
+    <Container
+      sx={{
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        height: '100vh',
+      }}
+    >
+      <StyledPaper elevation={3}>
+        <Typography
+          variant="h4"
+          align="center"
+          gutterBottom
+          sx={{ fontFamily: 'Roboto, sans-serif', fontWeight: 500, color: '#333' }}
+        >
+          Register
+        </Typography>
 
-        <Box component="form" onSubmit={handleSubmit}>
-          <Stack spacing={3}>
-            <FormControl required>
-              <FormLabel>Full Name</FormLabel>
+        <Box component="form" noValidate>
+          <Grid container spacing={4}>
+            {/* Left Column */}
+            <Grid item xs={12} sm={6}>
               <TextField
+                fullWidth
+                label="Name"
                 name="name"
                 value={formData.name}
                 onChange={handleChange}
-                placeholder="Enter your full name"
-                fullWidth
+                variant="outlined"
+                margin="normal"
               />
-            </FormControl>
-
-            <FormControl required>
-              <FormLabel>Mobile Number</FormLabel>
               <TextField
+                fullWidth
+                label="Password"
+                name="password"
+                type="password"
+                value={formData.password}
+                onChange={handleChange}
+                variant="outlined"
+                margin="normal"
+              />
+              <TextField
+                fullWidth
+                label="Mobile Number"
                 name="mobile"
                 value={formData.mobile}
                 onChange={handleChange}
-                type="tel"
-                placeholder="Enter your mobile number"
-                InputProps={{
-                  startAdornment: <InputAdornment position="start">+91</InputAdornment>,
-                }}
-                inputProps={{ maxLength: 10 }}
-                fullWidth
+                variant="outlined"
+                margin="normal"
               />
-            </FormControl>
+            </Grid>
 
-            <FormControl required>
-              <FormLabel>Password</FormLabel>
+            {/* Right Column */}
+            <Grid item xs={12} sm={6}>
               <TextField
-                name="password"
-                value={formData.password}
-                onChange={handleChange}
-                type="password"
-                placeholder="Create a password"
                 fullWidth
-              />
-            </FormControl>
-
-            <FormControl required>
-              <FormLabel>Roll Number</FormLabel>
-              <TextField
+                label="Rollno."
                 name="rollno"
                 value={formData.rollno}
                 onChange={handleChange}
-                placeholder="Enter your roll number"
-                fullWidth
+                variant="outlined"
+                margin="normal"
               />
-            </FormControl>
-
-            <FormControl required>
-              <FormLabel>Hostel</FormLabel>
               <TextField
-                select
+                fullWidth
+                label="Hostel Name"
                 name="hostel"
                 value={formData.hostel}
                 onChange={handleChange}
-                placeholder="Select your hostel"
-                fullWidth
-              >
-                <MenuItem value="Garnet-A">Garnet-A</MenuItem>
-                <MenuItem value="Garnet-B">Garnet-B</MenuItem>
-                <MenuItem value="Garnet-C">Garnet-C</MenuItem>
-              </TextField>
-            </FormControl>
-
-            <FormControl required>
-              <FormLabel>Room Number</FormLabel>
+                variant="outlined"
+                margin="normal"
+              />
               <TextField
+                fullWidth
+                label="Room Number"
                 name="room"
                 value={formData.room}
                 onChange={handleChange}
-                placeholder="Enter your room number"
-                fullWidth
+                variant="outlined"
+                margin="normal"
               />
-            </FormControl>
+            </Grid>
+          </Grid>
 
+          <Box className="pe_signin_button" data-client-id="13667769996153541401" mt={4} />
+
+          <Box
+            sx={{
+              display: 'flex',
+              justifyContent: 'center',
+              mt: 4,
+            }}
+          >
             <Button
-              type="submit"
+              onClick={handleSubmit}
               variant="contained"
+              color="primary"
               size="large"
-              fullWidth
-              sx={{ mt: 3 }}
+              disabled={!verifiedNumber}
             >
               Register
             </Button>
-          </Stack>
+          </Box>
         </Box>
-      </Stack>
+      </StyledPaper>
+
+      {/* ToastContainer to show toasts */}
+      <ToastContainer position="top-right" autoClose={5000} hideProgressBar newestOnTop closeOnClick rtl={false} pauseOnFocusLoss draggable pauseOnHover />
     </Container>
-  )
-} 
+  );
+}

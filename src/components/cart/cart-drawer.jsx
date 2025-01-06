@@ -18,6 +18,9 @@ export function CartDrawer({ isOpen, onClose }) {
   const { items, clearCart, getTotal } = useCart();
   const total = getTotal();
 
+  // Check if the total is a valid number and greater than zero
+  const isValidTotal = !isNaN(total) && total > 0;
+
   const handleCheckout = () => {
     // Implement checkout logic
   };
@@ -60,14 +63,16 @@ export function CartDrawer({ isOpen, onClose }) {
             <Typography fontWeight="bold">Total:</Typography>
             <Typography fontWeight="bold">{formatPrice(total)}</Typography>
           </Box>
-          <Button
-            variant="contained"
-            fullWidth
-            onClick={handleCheckout}
-            sx={{ mb: 1 }}
-          >
-            Checkout
-          </Button>
+          {isValidTotal && (
+            <Button
+              variant="contained"
+              fullWidth
+              onClick={handleCheckout}
+              sx={{ mb: 1 }}
+            >
+              Checkout
+            </Button>
+          )}
           <Button
             variant="outlined"
             fullWidth
@@ -79,4 +84,4 @@ export function CartDrawer({ isOpen, onClose }) {
       )}
     </Drawer>
   );
-} 
+}

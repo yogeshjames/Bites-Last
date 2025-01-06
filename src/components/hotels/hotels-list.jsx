@@ -15,7 +15,7 @@ export function HotelsList() {
     const fetchHotels = async () => {
       try {
         const response = await axios.get(
-          `${process.env.NEXT_PUBLIC_API_URL}/api/hotel/getall`
+          `http://localhost:5000/api/hotel/getall`
         )
         console.log(response)
         setHotels(response.data.data)

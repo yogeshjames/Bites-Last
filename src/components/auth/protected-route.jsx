@@ -1,27 +1,37 @@
 'use client'
 
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { useUser } from '@/context/user'
 import { CustomSpinner } from '@/components/ui/custom-spinner'
 
-export function ProtectedRoute({ children }) {
-  const { user, loading } = useUser()
+export default function ProtectedRoute({ children }) {
+  const { user, verifyToken } = useUser()
+  const [loading, setLoading] = useState(true)
   const router = useRouter()
 
   useEffect(() => {
+    const checkAuth = async () => {
+      //await verifyToken();  // Call verifyToken on each page load
+      setLoading(false); 
+    }
+
+    checkAuth()
+  }, [verifyToken])
+
+  useEffect(() => {
     if (!loading && !user) {
-      router.push('/')
+      router.push('/') 
     }
   }, [loading, user, router])
 
   if (loading) {
-    return <CustomSpinner />
+    return <CustomSpinner />  
   }
 
   if (!user) {
-    return null
+    return null  
   }
 
-  return children
-} 
+  return children  // Render protected content if the user is authenticated
+}

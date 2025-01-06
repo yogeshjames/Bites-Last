@@ -4,40 +4,53 @@ import { Box, Typography, Grid, Paper } from '@mui/material';
 
 export function AboutSection() {
   return (
-    <Box>
-      <Typography
-        variant="h4"
-        component="h2"
-        sx={{ mb: 4, fontWeight: 'bold', textAlign: 'center' }}
+    <Box 
+      display={{ xs: 'block', md: 'flex' }} 
+      paddingBottom="6vh" 
+      flexDirection={{ xs: 'column', md: 'row' }} 
+      width={'90vw'} 
+      backgroundColor={'#f5f5f5'} 
+      mt={'1vh'}
+    >
+      <Box 
+        display="flex" 
+        flex={'1'} 
+        justifyContent={'center'} 
+        alignItems={'center'} 
+        padding="2vh"
       >
-        About Us
-      </Typography>
-      <Grid container spacing={4}>
-        <Grid item xs={12} md={6}>
-          <Paper sx={{ p: 3, height: '100%' }}>
-            <Typography variant="h6" gutterBottom>
-              Our Mission
-            </Typography>
-            <Typography variant="body1">
-              We strive to provide the best food delivery experience to our customers,
-              connecting them with their favorite restaurants and delivering happiness
-              to their doorstep.
-            </Typography>
-          </Paper>
-        </Grid>
-        <Grid item xs={12} md={6}>
-          <Paper sx={{ p: 3, height: '100%' }}>
-            <Typography variant="h6" gutterBottom>
-              Our Values
-            </Typography>
-            <Typography variant="body1">
-              Quality, reliability, and customer satisfaction are at the heart of
-              everything we do. We work tirelessly to ensure that every delivery
-              meets our high standards.
-            </Typography>
-          </Paper>
-        </Grid>
-      </Grid>
+        <Typography 
+          textAlign={'center'} 
+          fontFamily={'Montserrat'} 
+          fontSize={{ xs: '2xl', md: '3xl' }} 
+          fontWeight={'bold'}
+          color="text.primary"
+        >
+          About us
+        </Typography>
+      </Box>
+      <Box 
+        display={'flex'} 
+        flex={'1'} 
+        justifyContent={'center'} 
+        alignItems={'center'} 
+        padding="2vh"
+      >
+        <Typography 
+          textAlign={'center'} 
+          paddingY="4" 
+          width='100%' 
+          color="text.secondary" 
+          fontSize={{ xs: 'sm', md: 'md' }}
+        >
+          We’re a small group of passionate individuals from NIT Trichy, driven by a shared vision to make a difference. What started as a spark of curiosity has grown into a mission to create meaningful change. From late-night brainstorming sessions to turning ideas into impactful actions, we believe in building solutions that truly matter.
+
+          Whether it's simplifying student queries, empowering institutions, or just adding a little extra flavor to everyday challenges, we’re here to bring innovation to life. Fueled by chai, camaraderie, and a can-do attitude, we’re on a journey to leave a lasting impact—one project at a time.
+
+          Join us as we turn “blehh blehh” into something extraordinary. 🚀
+        </Typography>
+      </Box>
     </Box>
   );
-} 
+}
+
