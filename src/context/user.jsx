@@ -27,7 +27,7 @@ export function UserProvider({ children }) {
   const login = async (credentials) => {
     try {
       console.log(credentials);
-        const response = await fetch(`http://localhost:5000/api/user/login`, {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/user/login`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(credentials),
@@ -50,7 +50,7 @@ localStorage.setItem('userId', `${result.clientId}`);
 
 const verifyToken = async () => {
     try {
-        const response = await fetch(`http://localhost:5000/api/auth/verifyToken`, {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/auth/verifyToken`, {
             credentials: 'include',
         });
 
@@ -74,7 +74,7 @@ useEffect(() => {
 
   const logout = async  () => {
     try {
-      const re = await fetch(`http://localhost:5000/api/auth/logout`);
+      const re = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/auth/logout`);
 
       if(re.ok){
         setUser(null)
@@ -93,7 +93,7 @@ useEffect(() => {
     const backendUrl = process.env.BACKEND_URL
     try {
       // Send the POST request to your external backend API with user data
-      const response = await fetch(`http://localhost:5000/api/user/register`, {////////WHY .ENV DOESNT WORK 
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/user/register`, {////////WHY .ENV DOESNT WORK 
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

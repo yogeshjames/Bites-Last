@@ -22,7 +22,7 @@ export function CartItem({ item }) {
         <CardContent sx={{ flex: 1, pl: 1.5, pr: 1.5 }}>
           <Typography variant="subtitle2" fontWeight="bold" noWrap>
             {item.name}
-          </Typography>
+          </Typography> 
           <Typography color="text.secondary" variant="body2">
             {formatPrice(item.price)}
           </Typography>
@@ -34,7 +34,7 @@ export function CartItem({ item }) {
               onChange={(e) => updateQuantity(item.id, parseInt(e.target.value))}
               inputProps={{ min: 1, max: 10 }}
               size="small"
-              sx={{ width: 50 }}
+              sx={{ width: 55 }}
             />
             <IconButton
               onClick={() => removeItem(item.id)}

@@ -42,7 +42,7 @@ export function HotelCard({
     >
       <Box sx={{ position: 'relative', width: 150 }}>
          <Image
-                  src={`http://localhost:5000/${thumbnailImage}`}
+                  src={`${thumbnailImage}`}
                   alt={hotelName}
                   fill
                   style={{ objectFit: 'cover', borderRadius: '8px' }}

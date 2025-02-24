@@ -17,6 +17,11 @@ const hotelSchema = new mongoose.Schema({
     min: 0,
     max: 5,
   },
+  
+numberOfUsersRated: {
+    type: Number,
+    default: 0,
+  },
   reviews: [
     {
       user: { type: String, required: true },
@@ -28,6 +33,8 @@ const hotelSchema = new mongoose.Schema({
     type: [String], 
     default: [],
   },
+  password: { type: String, required: true },
+  mobileNumber: { type: String, required: true },
   thumbnailImage: {
     type: String, // Path to the local uploaded image
     required: true,

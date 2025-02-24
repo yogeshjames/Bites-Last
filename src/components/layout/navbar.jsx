@@ -35,7 +35,7 @@ export function Navbar() {
         position="fixed" 
         sx={{ 
           backgroundColor: 'white',
-          height: '11vh',
+          height: {xs:'9vh',md:'11vh'},
           boxShadow: 1
         }}
       >
@@ -56,18 +56,13 @@ export function Navbar() {
               <Image
                 src="/images/logo.png"
                 alt="Logo"
-                width={75}
+                width={73}
                 height={75}
                 priority
               />
             </Link>
           </Box>
-
-          <Box sx={{ width: '40px' }}>
-            <ThemeToggle />
-          </Box>
-
-          {!isMobile && (
+          { (
             <Typography
               variant="h6"
               component="div"
@@ -75,7 +70,7 @@ export function Navbar() {
                 textAlign: 'center',
                 margin: 'auto',
                 flex: 1,
-                mx: 3,
+                mx: 2,
                 fontFamily: 'Scandia',
                 fontWeight: 'bold',
                 color: 'text.primary'
@@ -114,7 +109,7 @@ export function Navbar() {
                 color="primary"
                 sx={{
                   borderRadius: '24px',
-                  px: { xs: 3, md: 2.5 },
+                  px: { xs: 1, md: 2.5 },
                   py: { xs: 1, md: 0.75 },
                   fontSize: { xs: '1.1rem', md: '0.875rem' },
                   fontWeight: 'normal',
@@ -130,8 +125,9 @@ export function Navbar() {
         </Toolbar>
       </AppBar>
 
+      {/* we use this coz we hav alittle gap below the navabr which prevent s teh content from going indside  */}
       {/* Add spacing to prevent content from hiding under the fixed navbar */}
-      <Box sx={{ height: '11vh' }} />
+      <Box sx={{ height: '9vh' }} />
 
       <CartDrawer 
         isOpen={isCartOpen} 

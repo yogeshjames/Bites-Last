@@ -33,13 +33,13 @@ function HotelDetailsContent() {
     const fetchHotelDetails = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:5000/api/hotel/details/${id}`
+          `${process.env.NEXT_PUBLIC_API_URL}/api/hotel/details/${id}`
         )
         const hotelData = response.data.data
 
         if (hotelData.dishes?.length > 0) {
           const foodResponse = await axios.post(
-            `http://localhost:5000/api/food/details`,
+            `${process.env.NEXT_PUBLIC_API_URL}/api/food/details`,
             { dishIds: hotelData.dishes }
           )
           hotelData.dishes = foodResponse.data.data

@@ -9,7 +9,7 @@ export function HotelInfo({ hotel }) {
     <Box>
       <Box sx={{ position: 'relative', height: 400, width: '100%' }}>
         <Image
-          src={`http://localhost:5000/${hotel.thumbnailImage}`}
+          src={`${hotel.thumbnailImage}`}
           alt={hotel.hotelName}
           fill
           style={{ objectFit: 'cover', borderRadius: '8px' }}

@@ -22,7 +22,7 @@ export function ReviewsSection({ hotelId }) {
   const fetchReviews = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:5000/api/hotel/reviews/${hotelId}`
+        `${process.env.NEXT_PUBLIC_API_URL}/api/hotel/reviews/${hotelId}`
       )
       setReviews(response.data.data)
     } catch (error) {
@@ -35,7 +35,7 @@ export function ReviewsSection({ hotelId }) {
   const handleReviewSubmit = async (reviewData) => {
     try {
       await axios.post(
-        `http://localhost:5000/api/hotel/reviews/${hotelId}`,
+        `${process.env.NEXT_PUBLIC_API_URL}/api/hotel/reviews/${hotelId}`,
         reviewData,
         { withCredentials: true }
       )

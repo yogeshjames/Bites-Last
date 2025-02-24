@@ -8,7 +8,7 @@ function authenticateToken(req, res, next) {
   console.log(token); // Retrieve token from cookies
 
   if (!token) {
-    return res.status(401).json({ success: false, message: 'No token found' });
+    return res.status(401).json({ success: false, message: 'No token found,login again' });
   }
 
   jwt.verify(token, process.env.JWT_SECRET, (err, user) => {

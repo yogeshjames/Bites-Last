@@ -10,12 +10,12 @@ export function HotelsList() {
   const [hotels, setHotels] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
-
+console.log(process.env.NEXT_PUBLIC_API_URL);
   useEffect(() => {
     const fetchHotels = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:5000/api/hotel/getall`
+          `${process.env.NEXT_PUBLIC_API_URL}/api/hotel/getall`
         )
         console.log(response)
         setHotels(response.data.data)

@@ -1,7 +1,6 @@
 'use client'
-
 import { Box, Button, Typography, useMediaQuery, useTheme, Container, Divider } from '@mui/material';
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 import { LoginDialog } from '@/components/auth/login-dialog';
 import { HotelsList } from '@/components/hotels/hotels-list';
 import { Image } from '@/components/ui/image';
@@ -9,15 +8,25 @@ import { ReviewsSection } from './reviews-section';
 import { FeaturedSection } from './featured-section';
 import { AboutSection } from './about-section';
 import { useRouter } from 'next/navigation'; 
+import { UserContext } from '@/context/user'
+
 export function Home() {
   const [isSignInOpen, setIsSignInOpen] = useState(false);
   const theme = useTheme();
   const router = useRouter();
+  const { user } = useContext(UserContext); // Getting user authentication status
   const matches = useMediaQuery(theme.breakpoints.up('md'));
   const backgroundImage = matches ? '/images/largebg.jpg' : '/images/smallbg.jpg';
-  const handleRegisterRedirect = () => {
-    router.push('/register'); // Navigate to /register page
+
+  // Button logic based on authentication status
+  const handleButtonClick = () => {
+    if (user) {
+      router.push('/orders'); // Navigate to Orders page if logged in
+    } else {
+      router.push('/register'); // Navigate to Register page if not logged in
+    }
   };
+
   return (
     <Box sx={{ overflowX: 'hidden' }}>
       {/* Hero Section */}
@@ -62,7 +71,7 @@ export function Home() {
             Get your food delivered.
           </Typography>
           <Button
-            onClick={() => handleRegisterRedirect()}
+            onClick={handleButtonClick}
             variant="contained"
             color="primary"
             size="large"
@@ -75,12 +84,10 @@ export function Home() {
               textTransform: 'none'
             }}
           >
-            Register Now
+            {user ? "See Your Orders" : "Register Now"}
           </Button>
         </Box>
       </Box>
-
-     
       <Divider />
 
       {/* Hotels List Section */}
@@ -88,7 +95,7 @@ export function Home() {
         <Typography
           variant="h4"
           component="h2"
-          sx={{  fontWeight: 'bold', textAlign: 'center' }}
+          sx={{ fontWeight: 'bold', textAlign: 'center' }}
         >
           Popular Restaurants
         </Typography>
@@ -97,19 +104,12 @@ export function Home() {
 
       <Divider />
 
-       {/* Featured Section */}
-       <Container maxWidth="lg" sx={{ py: 5 }}>
+      {/* Featured Section */}
+      <Container maxWidth="lg" sx={{ py: 5 }}>
         <FeaturedSection />
       </Container>
 
-          <Divider/>
-
-      {/* Reviews Section */}
-      {/* <Container maxWidth="lg" sx={{ py: 8 }}>
-        <ReviewsSection />
-      </Container>
-
-      <Divider /> */}
+      <Divider/>
 
       {/* About Section */}
       <Container maxWidth="lg" sx={{ py: 6 }}>
@@ -123,4 +123,4 @@ export function Home() {
       />
     </Box>
   );
-} 
+}

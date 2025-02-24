@@ -1,5 +1,4 @@
 const mongoose = require('mongoose');
-
 // Define the schema for the Food model
 const foodSchema = new mongoose.Schema({
   id: {
@@ -8,6 +7,10 @@ const foodSchema = new mongoose.Schema({
     unique: true,  // Ensures that the 'id' is unique
     trim: true,
   },
+  hotelId: {//the id of the hotel the food is associated with
+    type: String,
+    required: true,
+  },///// 
   name: {
     type: String,
     required: true,

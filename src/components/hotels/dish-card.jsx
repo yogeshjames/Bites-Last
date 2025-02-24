@@ -32,7 +32,7 @@ export function DishCard({ dish , restaurantId}) {
     >
       <Box sx={{ position: 'relative', height: 100, width: '100%' }}>
         <Image
-          src={`http://localhost:5000/${dish.image}`}
+          src={`${dish.image}`}
           alt={dish.name}
           fill
           style={{ objectFit: 'cover', borderRadius: '8px' }}
