@@ -56,8 +56,13 @@ export function Navbar() {
               <Image
                 src="/images/logo.png"
                 alt="Logo"
+<<<<<<< HEAD
                 width={73}
                 height={75}
+=======
+                 width={73}
+                 height={75}
+>>>>>>> feature/socket-integration
                 priority
               />
             </Link>
