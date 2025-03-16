@@ -21,10 +21,7 @@
     "mongoose": "^8.10.1",
     "multer": "^1.4.5-lts.1",
     "multer-storage-cloudinary": "^4.0.0",
-<<<<<<< HEAD
-=======
     "socket.io": "^4.8.1",
->>>>>>> feature/socket-integration
     "uuid": "^11.0.3"
   }
 }

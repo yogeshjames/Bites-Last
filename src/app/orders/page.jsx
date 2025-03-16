@@ -1,15 +1,4 @@
 "use client";
-<<<<<<< HEAD
-
-import { Box, Tabs, Tab, Typography, Card, CardContent, CircularProgress } from "@mui/material";
-import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
-import axios from "axios";
-import ProtectedRoute from "@/components/auth/protected-route"; // Ensures only logged-in users access this page
-import { BackButton } from "@/components/ui/back-button";
-import { CustomSpinner } from "@/components/ui/custom-spinner";
-
-=======
 import React, { useState, useEffect } from "react";
 import {
   Box,
@@ -29,7 +18,6 @@ import "react-toastify/dist/ReactToastify.css";
 import { io } from "socket.io-client";
 
 const socket = io(process.env.NEXT_PUBLIC_SOCKET_URL);
->>>>>>> feature/socket-integration
 export default function OrdersPage() {
   return (
     <ProtectedRoute>
@@ -45,42 +33,11 @@ function OrdersContent() {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-<<<<<<< HEAD
-  const [tabValue, setTabValue] = useState(0); // Tab to filter orders by status
-  const router = useRouter();
-=======
   const [tabValue, setTabValue] = useState(0);
->>>>>>> feature/socket-integration
 
   useEffect(() => {
     const fetchOrders = async () => {
       try {
-<<<<<<< HEAD
-        const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/orders/user-orders`, {
-          withCredentials: true, // Sends the authentication token
-        });
-        setOrders(response.data.orders);
-      } catch (err) {
-        setError("Failed to load orders.");
-      } finally {
-        setLoading(false);
-      }
-
-
-    };
-
-    fetchOrders();
-  }, []);
-
-  if (loading) return <CustomSpinner />;
-  if (error) return <Box>{error}</Box>;
-
-  const filteredOrders = orders.filter(order => {
-    if (tabValue === 0) return true; // Show all orders
-    if (tabValue === 1) return order.status === "Waiting";
-    if (tabValue === 2) return order.status === "Accepted";
-    if (tabValue === 4) return order.status === "Cancelled";
-=======
         // console.log("[API] Fetching orders...");
         const response = await axios.get(
           `${process.env.NEXT_PUBLIC_API_URL}/api/orders/user-orders`,
@@ -158,7 +115,6 @@ function OrdersContent() {
     if (tabValue === 2) return order.status === "Accepted";
     if (tabValue === 3) return order.status === "Cancelled";
     return true;
->>>>>>> feature/socket-integration
   });
 
   return (
@@ -185,47 +141,12 @@ function OrdersContent() {
             No orders found.
           </Typography>
         ) : (
-<<<<<<< HEAD
-          filteredOrders.map(order => (
-            <OrderCard key={order.orderId} order={order} />
-          ))
-=======
           filteredOrders.map((order) => <OrderCard key={order.orderId} order={order} />)
->>>>>>> feature/socket-integration
         )}
       </Box>
     </>
   );
 }
-<<<<<<< HEAD
-function OrderCard({ order }) {
-    return (
-      <Card sx={{ mb: 3, p: 2, boxShadow: 2 }}>
-        <CardContent>
-          <Typography variant="h6" fontWeight="bold">
-            {order.hotelName}
-          </Typography>
-          <Typography color="text.secondary">Id: {order.orderId}</Typography>
-          <Typography color="text.secondary">Contact: {order.hotelContact}</Typography>
-          <Typography color="text.secondary">Total: ₹{order.totalPrice}</Typography>
-          <Typography color={getStatusColor(order.status)} fontWeight="bold">
-            Status: {order.status}
-          </Typography>
-          <Box sx={{ mt: 0.5 }}>
-            {order.cartItems.map((item) => (
-              <Typography key={item.id} color="text.secondary">
-                - {item.quantity} × {item.name} (₹{item.price})
-              </Typography>
-            ))}
-          </Box>
-        </CardContent>
-      </Card>
-    );
-  }
-  
-
-// Function to determine the status color
-=======
 
 function OrderCard({ order }) {
   return (
@@ -252,14 +173,9 @@ function OrderCard({ order }) {
   );
 }
 
->>>>>>> feature/socket-integration
 const getStatusColor = (status) => {
   if (status === "Waiting") return "#f1c40f";
   if (status === "Accepted") return "#3498db";
   if (status === "Cancelled") return "#e74c3c";
   return "text.primary";
-<<<<<<< HEAD
 };
-=======
-};
->>>>>>> feature/socket-integration
