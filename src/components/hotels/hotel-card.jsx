@@ -41,6 +41,7 @@ export function HotelCard({
       onClick={handleClick}
     >
       <Box sx={{ position: 'relative', width: 150 }}>
+<<<<<<< HEAD
          <Image
                   src={`${thumbnailImage}`}
                   alt={hotelName}
@@ -48,6 +49,16 @@ export function HotelCard({
                   style={{ objectFit: 'cover', borderRadius: '8px' }}
                   priority
                 />
+=======
+      <Image
+    src={thumbnailImage}
+    alt={hotelName}
+    fill
+    style={{ objectFit: 'cover', borderRadius: '8px' }}
+    sizes="(max-width: 768px) 100vw, 150px"
+    priority
+  />
+>>>>>>> feature/socket-integration
         
           <HeartButton isLiked={liked}  onClick={handleLikeClick} />
 

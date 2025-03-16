@@ -9,6 +9,7 @@ const cookieParser = require('cookie-parser');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
+const { getIo } = require('../socket');
 
 router.use(express.json());
 
@@ -25,8 +26,8 @@ router.use(express.json());
 router.post("/checkout", authenticateToken, async (req, res) => {
   // Log headers, cookies, and body for debugging
 //   console.log("Headers:", req.headers);
-  console.log("Cookies:", req.cookies);
-  console.log("Request body:", req.body);
+  // console.log("Cookies:", req.cookies);
+  // console.log("Request body:", req.body);
 
   try {
     const { cartItems, total, restaurantId } = req.body;
@@ -86,7 +87,12 @@ router.post("/checkout", authenticateToken, async (req, res) => {
     });
     
     await newOrder.save();
-    
+    const io = getIo();
+
+// Emit the "orderCreated" event to both the hotel's room and the client's room
+io.to(restaurantId.toString()).emit('orderCreated', newOrder);
+io.to(clientId.toString()).emit('orderCreated', newOrder);
+console.log(`Emitted new order to hotel room: ${restaurantId} and client room: ${clientId}`);
     return res.status(200).json({ message: "Order placed successfully", orderId });
   } catch (error) {
     console.error("Checkout error:", error);
@@ -99,7 +105,7 @@ router.post("/checkout", authenticateToken, async (req, res) => {
 router.get("/user-orders", authenticateToken, async (req, res) => {
     try {
       const clientId = req.user.id;
-      console.log(req.user);
+      // console.log(req.user);
       if (!clientId) {
         return res.status(401).json({ message: "User not authenticated" });
       }
@@ -132,58 +138,64 @@ router.get("/user-orders", authenticateToken, async (req, res) => {
   });
   
   
-
-///update orders FOR HOTEL 
-router.patch('/update/:orderId',  async (req, res) => {
-    try {
-      const { orderId } = req.params;
-      const { status: newStatus } = req.body;
+router.patch('/update/:orderId', async (req, res) => {
+  try {
+    const io = getIo();
+    const { orderId } = req.params;
+    const { status: newStatus } = req.body;
   
-      // Find and update the order
-      const updatedOrder = await Order.findOneAndUpdate(
-        { orderId: orderId }, // Query by the custom orderId field
-        { status: newStatus },
-        { new: true, runValidators: true }
-      );
+    // Find and update the order
+    const updatedOrder = await Order.findOneAndUpdate(
+      { orderId: orderId },
+      { status: newStatus },
+      { new: true, runValidators: true }
+    );
       
-      if (!updatedOrder) {
-        return res.status(404).json({
-          success: false,
-          message: 'Order not found'
-        });
-      }
-      const hotelId=updatedOrder.hotelId;
-
-      const token = req.cookies.authToken;
-      if (!token) {
-        return res.status(401).json({ message: 'Not authenticated' });
-      }
-      let decoded;
-      try {
-        decoded = jwt.verify(token, process.env.JWT_SECRET1);
-      } catch (err) {
-        return res.status(401).json({ message: 'Invalid token' });
-      }
-          if (decoded.hotelId !== hotelId) {
-            return res.status(403).json({ message: 'Not authorized ' });
-          }
-
-      res.status(200).json({
-        success: true,
-        message: 'Order status updated successfully',
-        data: updatedOrder
-      });
-  
-    } catch (error) {
-      console.error('Error updating order:', error);
-      res.status(500).json({
+    if (!updatedOrder) {
+      return res.status(404).json({
         success: false,
-        message: 'Server error',
-        error: error.message
+        message: 'Order not found'
       });
     }
-  });
+    const hotelId = updatedOrder.hotelId;
+    const clientId = updatedOrder.clientId; 
+    // Authentication Check
+    const token = req.cookies.authToken;
+    if (!token) {
+      return res.status(401).json({ message: 'Not authenticated' });
+    }
+    let decoded;
+    try {
+      decoded = jwt.verify(token, process.env.JWT_SECRET1);
+    } catch (err) {
+      return res.status(401).json({ message: 'Invalid token' });
+    }
+    if (decoded.hotelId !== hotelId) {
+      return res.status(403).json({ message: 'Not authorized' });
+    }
 
+    // --- NEW: Emit order update to the specific hotel room ---
+io.to(hotelId.toString()).emit('orderUpdated', updatedOrder);
+io.to(clientId.toString()).emit('orderUpdated', updatedOrder);
+console.log(`Emitted update to hotel room: ${hotelId} and client room: ${clientId}`);
+
+
+    // Send response
+    res.status(200).json({
+      success: true,
+      message: 'Order status updated successfully',
+      data: updatedOrder
+    });
+  
+  } catch (error) {
+    console.error('Error updating order:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Server error',
+      error: error.message
+    });
+  }
+});
 
 //for hotels page to display thier orders
 router.get("/hotel/:hotelId", async (req, res) => {
@@ -201,7 +213,7 @@ const token = req.cookies.authToken;
   } catch (err) {
     return res.status(401).json({ message: 'Invalid token' });
   }
-  console.log(decoded, hotelId);
+  // console.log(decoded, hotelId);
       if (decoded.hotelId !== hotelId) {
         return res.status(403).json({ message: 'Not authorized ' });
       }

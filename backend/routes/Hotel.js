@@ -12,6 +12,10 @@ const cookieParser = require('cookie-parser');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const Order = require('../models/Order'); // Order model
+<<<<<<< HEAD
+=======
+const { getIo } = require('../socket');
+>>>>>>> feature/socket-integration
 
 // /Helper function for Cloudinary upload
 /*const uploadToCloudinary = (fileBuffer, folder) => {
@@ -55,7 +59,11 @@ router.post("/register", upload.fields([{ name: "hotelImage" }, { name: "foodIma
       resource_type: "image",
       folder: "bites/hotel_thumbnails",
     });
+<<<<<<< HEAD
     console.log("Hotel Image Result:", hotelImageResult);
+=======
+    // console.log("Hotel Image Result:", hotelImageResult);
+>>>>>>> feature/socket-integration
 
     const thumbnailImage = hotelImageResult.secure_url; // Get Cloudinary image URL
 
@@ -131,6 +139,10 @@ console.log(2);
 router.post('/login' , async (req , res) =>{
 console.log("login hit");
 const { phone, password } = req.body;
+<<<<<<< HEAD
+=======
+const io = getIo();
+>>>>>>> feature/socket-integration
 try {
   const hotel = await Hotel.findOne({ mobileNumber: phone });
   if (!hotel) {
@@ -152,7 +164,15 @@ try {
     sameSite: 'lax',
     maxAge: 24 * 60 * 60 * 1000, // 1 day
   });
+<<<<<<< HEAD
 console.log(token);
+=======
+// console.log(token);
+
+  //// join the room after front end send request 
+  io.to(hotel.hotelId.toString()).emit('joinHotelRoom', hotel.hotelId.toString());
+
+>>>>>>> feature/socket-integration
   res.status(200).json({ message: 'Login successful',hotelId:hotel.hotelId});
 } catch (error) {
   console.error(error);
@@ -198,7 +218,10 @@ router.get('/getall', async (req, res) => {
 
 // Route to get all hotels this is for user
 router.get('/getall', async (req, res) => {
+<<<<<<< HEAD
     console.log('GET /api/hotel/getall route hit');
+=======
+>>>>>>> feature/socket-integration
   try {
     const hotels = await Hotel.find();
     
@@ -207,7 +230,10 @@ router.get('/getall', async (req, res) => {
       success: true,
       data: hotels,
     });
+<<<<<<< HEAD
     console.log(hotels)
+=======
+>>>>>>> feature/socket-integration
   } catch (error) {
     console.error('Error fetching hotels:', error.message);
     res.status(500).json({

@@ -2,8 +2,16 @@ const express = require('express');
 const jwt = require('jsonwebtoken');
 const User = require('../models/User'); 
 const bcrypt = require('bcryptjs');
+<<<<<<< HEAD
 require('dotenv').config();
 
+=======
+const { getIo } = require('../socket');
+require('dotenv').config();
+
+const io = getIo();
+
+>>>>>>> feature/socket-integration
 const router = express.Router();
 
 // Login route
@@ -33,12 +41,21 @@ console.log(token);
       secure: false, ///WHY THIS ??/
     });
 
+<<<<<<< HEAD
+=======
+    //join room after they sent request 
+    io.to(user.userId.toString()).emit('joinClientRoom', user.userId.toString());
+>>>>>>> feature/socket-integration
     res.status(200).json({
       message: 'Login successful',
       clientId: user.userId, 
       
     });
+<<<<<<< HEAD
     console.log(2);
+=======
+    // console.log(2);
+>>>>>>> feature/socket-integration
   } catch (error) {
     console.error('Login Error:', error);
     res.status(500).json({ message: 'Internal server error' });
