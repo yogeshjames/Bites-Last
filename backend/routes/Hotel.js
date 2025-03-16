@@ -201,6 +201,22 @@ router.get('/getall', async (req, res) => {
 
 
 
+router.get("/auth", (req, res) => {
+  const token = req.cookies.authToken; // Retrieve token from cookies
+
+  if (!token) {
+    return res.status(401).json({ message: "Not authenticated" });
+  }
+
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET1);
+    res.json({ authenticated: true, user: decoded });
+  } catch (err) {
+    res.status(401).json({ message: "Invalid token" });
+  }
+});
+
+
 
 // Route to get all hotels this is for user
 router.get('/getall', async (req, res) => {
