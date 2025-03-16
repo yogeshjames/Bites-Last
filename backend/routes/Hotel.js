@@ -12,6 +12,7 @@ const cookieParser = require('cookie-parser');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const Order = require('../models/Order'); // Order model
+const { getIo } = require('../socket');
 
 // /Helper function for Cloudinary upload
 /*const uploadToCloudinary = (fileBuffer, folder) => {
@@ -55,7 +56,7 @@ router.post("/register", upload.fields([{ name: "hotelImage" }, { name: "foodIma
       resource_type: "image",
       folder: "bites/hotel_thumbnails",
     });
-    console.log("Hotel Image Result:", hotelImageResult);
+    // console.log("Hotel Image Result:", hotelImageResult);
 
     const thumbnailImage = hotelImageResult.secure_url; // Get Cloudinary image URL
 
@@ -131,6 +132,7 @@ console.log(2);
 router.post('/login' , async (req , res) =>{
 console.log("login hit");
 const { phone, password } = req.body;
+const io = getIo();
 try {
   const hotel = await Hotel.findOne({ mobileNumber: phone });
   if (!hotel) {
@@ -152,7 +154,11 @@ try {
     sameSite: 'lax',
     maxAge: 24 * 60 * 60 * 1000, // 1 day
   });
-console.log(token);
+// console.log(token);
+
+  //// join the room after front end send request 
+  io.to(hotel.hotelId.toString()).emit('joinHotelRoom', hotel.hotelId.toString());
+
   res.status(200).json({ message: 'Login successful',hotelId:hotel.hotelId});
 } catch (error) {
   console.error(error);
@@ -198,7 +204,6 @@ router.get('/getall', async (req, res) => {
 
 // Route to get all hotels this is for user
 router.get('/getall', async (req, res) => {
-    console.log('GET /api/hotel/getall route hit');
   try {
     const hotels = await Hotel.find();
     
@@ -207,7 +212,6 @@ router.get('/getall', async (req, res) => {
       success: true,
       data: hotels,
     });
-    console.log(hotels)
   } catch (error) {
     console.error('Error fetching hotels:', error.message);
     res.status(500).json({

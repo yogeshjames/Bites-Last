@@ -18,20 +18,26 @@ import { Close as CloseIcon } from '@mui/icons-material';
 import { useState } from 'react';
 import { useAuth } from '@/hooks/use-auth';
 import { useRouter } from 'next/navigation'; 
+import { io } from "socket.io-client";
 
+const socket = io(process.env.NEXT_PUBLIC_SOCKET_URL);
 
 export function LoginDialog({ isOpen, onClose }) {
   const [credentials, setCredentials] = useState({
     mobile: '',
     password: ''
   });
+
   const { handleLogin } = useAuth();
-  const router = useRouter();
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       await handleLogin(credentials);
       onClose();
+    const clientId= localStorage.getItem('userId');
+
+      socket.emit("joinHotelRoom", clientId);
+      console.log(`Joined WebSocket room: ${clientId}`);
       window.location.reload();
     } catch (error) {
       console.error('Login failed:', error);

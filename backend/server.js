@@ -1,6 +1,12 @@
 const express = require('express');
+const http = require('http'); // Required to attach Socket.IO to an HTTP server
 const mongoose = require('mongoose');
 const cors = require('cors'); // Import CORS
+const { initIo } = require('./socket');
+const app = express();
+const server = http.createServer(app);
+
+initIo(server);
 const cookieParser = require('cookie-parser'); // Import cookie-parser
 const Register = require('./routes/register');
 const Auth = require('./controllers/Auth'); // Token verification routes
@@ -10,16 +16,16 @@ const FoodRoutes = require('./routes/Food');
 const OrderRoutes = require('./routes/Order');
 const Hotel = require('./models/Hotel');
 const Food = require('./models/Food');
-const app = express();
 const PORT = process.env.PORT || 5000;
 require('dotenv').config();
 
+//change url in prod
 ////CORS CHANGE IN PROD
 app.use(cors({
   origin: [
     'http://localhost:3000', 
     'http://localhost:3001',
-    'https://your-production-domain.com'
+    'https://your-production-domain.com'////prod domain
   ],
   credentials: true
 }));
@@ -44,6 +50,6 @@ app.use('/api/hotel', HotelRoutes);     // Hotel routes
 app.use('/api/food', FoodRoutes); 
 app.use('/api/orders',OrderRoutes)
 // Start the server
-app.listen(PORT, () => {
+server.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
 });
