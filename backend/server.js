@@ -26,6 +26,7 @@ app.use(cors({
     'http://localhost:3000', 
     'http://localhost:3001',
     'https://bites-hotel-nwjp1sj5w-yogeshjames-projects.vercel.app',
+    'https://bites-hotel-5l029obeo-yogeshjames-projects.vercel.app',
     'https://bites-hotel.vercel.app'////prod domain
   ],
   credentials: true
