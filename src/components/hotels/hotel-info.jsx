@@ -27,7 +27,7 @@ export function HotelInfo({ hotel }) {
             variant="h4"
             fontWeight="bold"
             fontFamily="Nunito"
-            sx={{ position: 'relative', top: '11px', mr: -1 }}
+            sx={{ position: 'relative', top: '11px', mr: 2 }}
           >
             {hotel.hotelName}
           </Typography>

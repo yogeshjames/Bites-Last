@@ -62,7 +62,7 @@ function HotelDetailsContent() {
   return (
     <>
       <HotelInfo hotel={hotelDetails} />
-      <Box sx={{ mt: 8 }}>
+      <Box sx={{ mb: 5 }}>
         <Tabs
           value={tabValue}
           onChange={(e, newValue) => setTabValue(newValue)}

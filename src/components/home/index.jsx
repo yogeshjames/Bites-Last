@@ -3,6 +3,7 @@ import { Box, Button, Typography, useMediaQuery, useTheme, Container, Divider } 
 import { useState, useContext } from 'react';
 import { LoginDialog } from '@/components/auth/login-dialog';
 import { HotelsList } from '@/components/hotels/hotels-list';
+import { SignOutButton } from '@/components/auth/SignOut';
 import { Image } from '@/components/ui/image';
 import { ReviewsSection } from './reviews-section';
 import { FeaturedSection } from './featured-section';
@@ -114,6 +115,9 @@ export function Home() {
       {/* About Section */}
       <Container maxWidth="lg" sx={{ py: 6 }}>
         <AboutSection />
+<Box sx={{ display: 'flex', justifyContent: 'center', mt: 2 }}>
+    <SignOutButton />
+  </Box>
       </Container>
 
       {/* Login Dialog */}

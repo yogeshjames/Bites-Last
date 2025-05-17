@@ -30,11 +30,13 @@ router.post('/', async (req, res) => {
       expiresIn: '12h',
     });
 console.log(token);
-    res.cookie('token', token, {
-      httpOnly: true,
-      sameSite: 'lax',
-      secure: false, ///WHY THIS ??/
-    });
+   res.cookie('token', token, {
+  httpOnly: true,            
+  sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
+secure: process.env.NODE_ENV === 'production', 
+  path: '/',
+});
+
 
     //join room after they sent request 
     io.to(user.userId.toString()).emit('joinClientRoom', user.userId.toString());
@@ -57,11 +59,12 @@ router.post("/signout", (req, res) => {
   // Clear the  token cookie.
   res.clearCookie("token", {
     httpOnly: true,
-    secure: false, // true in production
-    sameSite: "lax",
+    sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
+secure: process.env.NODE_ENV === 'production',
   });
   res.status(200).json({ message: "Sign out successful" });
 });
+
 
 
 

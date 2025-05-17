@@ -1,6 +1,6 @@
 'use client'
 
-import { Card, CardMedia, CardContent, Typography, Box, IconButton } from '@mui/material';
+import { Card, CardMedia, CardContent, Typography, Box } from '@mui/material';
 import Image from 'next/image';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
@@ -21,48 +21,62 @@ export function HotelCard({
     router.push(`/hotels/${hotelId}`);
   };
 
-  const handleLikeClick = (event) => {
-    event.stopPropagation();
-    setLiked(!liked);
-  };
 
   return (
     <Card
+      onClick={handleClick}
       sx={{
+        width: 320,           // fixed width for all cards
+        height: 200,          // fixed height for all cards
         display: 'flex',
-        maxWidth: 'xl',
+        flexDirection: 'column',
         cursor: 'pointer',
+        borderRadius: 2,
         '&:hover': {
           boxShadow: 8,
           transform: 'translateY(-4px)',
           transition: 'all 0.3s ease-in-out',
         },
       }}
-      onClick={handleClick}
     >
-      <Box sx={{ position: 'relative', width: 150 }}>
-      <Image
-    src={thumbnailImage}
-    alt={hotelName}
-    fill
-    style={{ objectFit: 'cover', borderRadius: '8px' }}
-    sizes="(max-width: 768px) 100vw, 150px"
-    priority
-  />
+      <Box sx={{ position: 'relative', width: '100%', height: 200, borderRadius: 2, overflow: 'hidden' }}>
+        <Image
+          src={thumbnailImage}
+          alt={hotelName}
+          fill
+          style={{ objectFit: 'cover' }}
+          sizes="(max-width: 768px) 100vw, 320px"
+          priority
+        />
         
-          <HeartButton isLiked={liked}  onClick={handleLikeClick} />
-
       </Box>
 
-      <CardContent sx={{ flex: 1 }}>
-        <Typography variant="h6" color="text.primary" gutterBottom>
+      <CardContent sx={{ flexGrow: 1, overflow: 'hidden' }}>
+        <Typography
+          variant="h6"
+          color="text.primary"
+          gutterBottom
+          sx={{
+            whiteSpace: 'nowrap',
+            overflow: 'hidden',
+            textOverflow: 'ellipsis',
+          }}
+        >
           {hotelName}
         </Typography>
 
-        <Typography variant="body2" color="text.secondary">
+        <Typography
+          variant="body2"
+          color="text.secondary"
+          sx={{
+            whiteSpace: 'nowrap',
+            overflow: 'hidden',
+            textOverflow: 'ellipsis',
+          }}
+        >
           Rating: {currentRating} ⭐ ({numberOfUsersRated} users)
         </Typography>
       </CardContent>
     </Card>
   );
-} 
+}

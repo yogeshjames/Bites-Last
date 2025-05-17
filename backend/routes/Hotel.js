@@ -150,8 +150,8 @@ try {
 
   res.cookie('authToken', token, {
     httpOnly: true,
-    secure:false, // Set to true in production (HTTPS)
-    sameSite: 'lax',
+    sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
+secure: process.env.NODE_ENV === 'production',
     maxAge: 24 * 60 * 60 * 1000, // 1 day
   });
 // console.log(token);
