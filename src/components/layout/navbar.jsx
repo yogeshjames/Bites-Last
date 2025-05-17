@@ -67,7 +67,7 @@ export function Navbar() {
                 color: 'text.primary',
                 whiteSpace: 'nowrap',
                 fontSize: {
-                  xs: '1.05rem',
+                  xs: '0.87rem',
                   sm: '1.275rem',
                   md: '1.5rem',
                 },

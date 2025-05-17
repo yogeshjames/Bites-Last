@@ -51,7 +51,6 @@ console.log(process.env.NEXT_PUBLIC_API_URL);
       <Grid container spacing={3}>
         {hotels.map((hotel) => (
           <Grid item xs={12} sm={6} md={4}  key={hotel.hotelId} sx={{
-    ml: { xs: 2,sm:0 } 
   }}>
             <HotelCard
               hotelId={hotel.hotelId}

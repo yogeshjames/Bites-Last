@@ -21,17 +21,18 @@ export function HotelCard({
     router.push(`/hotels/${hotelId}`);
   };
 
-
   return (
     <Card
       onClick={handleClick}
       sx={{
-        width: 320,           // fixed width for all cards
-        height: 200,          // fixed height for all cards
+        width: '100%',
+        maxWidth: 320,              // Responsive max width
+        height: 200,
         display: 'flex',
         flexDirection: 'column',
         cursor: 'pointer',
         borderRadius: 2,
+        mx: 'auto',                 // Auto horizontal margin to help centering
         '&:hover': {
           boxShadow: 8,
           transform: 'translateY(-4px)',
@@ -48,7 +49,6 @@ export function HotelCard({
           sizes="(max-width: 768px) 100vw, 320px"
           priority
         />
-        
       </Box>
 
       <CardContent sx={{ flexGrow: 1, overflow: 'hidden' }}>
