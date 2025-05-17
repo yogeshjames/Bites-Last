@@ -25,7 +25,7 @@ app.use(cors({
   origin: [
     'http://localhost:3000', 
     'http://localhost:3001',
-    'https://your-production-domain.com'////prod domain
+    'https://bites-hotel.vercel.app/'////prod domain
   ],
   credentials: true
 }));
