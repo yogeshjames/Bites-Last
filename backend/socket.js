@@ -8,7 +8,11 @@ function initIo(server) {
     cors: {
       origin: [
         'http://localhost:3000',
-        'http://localhost:3001'
+        'http://localhost:3001',
+        'https://bites-hotel-5l029obeo-yogeshjames-projects.vercel.app',
+         'https://bites-last-pefr6iajk-yogeshjames-projects.vercel.app',
+         'https://bites-last.vercel.app',
+        'https://bites-hotel.vercel.app'
       ],
       methods: ["GET", "POST"]
     }
