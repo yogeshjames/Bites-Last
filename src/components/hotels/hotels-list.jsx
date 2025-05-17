@@ -50,8 +50,7 @@ console.log(process.env.NEXT_PUBLIC_API_URL);
     <Container maxWidth="xl" sx={{ py: 6 }}>
       <Grid container spacing={3}>
         {hotels.map((hotel) => (
-          <Grid item xs={12} sm={6} md={4}  key={hotel.hotelId} sx={{
-  }}>
+          <Grid item xs={12} sm={6} md={4}  key={hotel.hotelId} >
             <HotelCard
               hotelId={hotel.hotelId}
               hotelName={hotel.hotelName}
